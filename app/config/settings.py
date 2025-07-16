@@ -5,8 +5,8 @@ load_dotenv()
 
 class Settings:
     # Database
-    MONGO_URL: str = os.getenv("MONGO_URL", "mongodb://localhost:27017")
-    DATABASE_NAME: str = os.getenv("DATABASE_NAME", "automobile_safety_db")
+    MONGO_URL: str = os.getenv("MONGO_URL", "mongodb://yelmosatheesh:Reset%40123@93.127.134.137:27017?authSource=admin")
+    DATABASE_NAME: str = os.getenv("DATABASE_NAME", "autosafety")
     
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-here")

@@ -17,8 +17,8 @@ async def get_database() -> AsyncIOMotorDatabase:
 async def connect_to_mongo():
     """Create database connection"""
     # MongoDB connection string - update as needed
-    MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
-    DATABASE_NAME = os.getenv("DATABASE_NAME", "automobile_safety_db")
+    MONGO_URL = os.getenv("MONGO_URL", "mongodb://yelmosatheesh:Reset%40123@93.127.134.137:27017?authSource=admin")
+    DATABASE_NAME = os.getenv("DATABASE_NAME", "autosafety")
     
     db.client = AsyncIOMotorClient(MONGO_URL)
     db.database = db.client[DATABASE_NAME]
