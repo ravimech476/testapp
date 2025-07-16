@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'automobile-safety-api',
-      script: '/home/test/testapp/venv/bin/uvicorn',
+      script: 'venv/bin/uvicorn',
       args: 'main:app --host 0.0.0.0 --port 8000',
       cwd: '/home/test/testapp',
       instances: 1,
@@ -10,9 +10,12 @@ module.exports = {
       autorestart: true,
       watch: false,
       max_memory_restart: '1G',
+      min_uptime: '30s',
+      max_restarts: 5,
+      restart_delay: 5000,
       env: {
-        PYTHONPATH: '/home/test/testapp',
-        PATH: '/home/test/testapp/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+        NODE_ENV: 'production',
+        PYTHONPATH: '/home/test/testapp'
       }
     }
   ]

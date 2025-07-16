@@ -136,6 +136,8 @@ celerybeat.pid
 
 # Environments
 .env
+.env.local
+.env.production
 .envrc
 .venv
 env/
@@ -143,6 +145,17 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# PM2 logs and runtime files
+.pm2/
+logs/
+*.log
+
+# Production specific
+data/
+backups/
+*.pid
+*.sock
 
 # Spyder project settings
 .spyderproject

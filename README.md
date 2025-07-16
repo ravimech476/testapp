@@ -1,291 +1,158 @@
-# Automobile Safety Management System - Backend
+# Automobile Safety Management System
 
-This is the backend API for the Automobile Safety Management System built with FastAPI and MongoDB.
+A FastAPI-based system to manage safety inspections and issues in the automobile industry.
 
-## 🔧 Authentication System
+## 🚀 Features
 
-This system uses **bcrypt-free authentication** with PBKDF2-SHA256 for password hashing, eliminating compatibility issues with bcrypt versions.
+- **Authentication System** - JWT-based user authentication
+- **User Management** - Role-based access control
+- **Machine Management** - Track automobile equipment
+- **Issue Tracking** - Safety inspection management
+- **File Upload** - Image and document handling
+- **MongoDB Integration** - Async database operations
 
-## Features
+## 🛠️ Tech Stack
 
-- User authentication and authorization with JWT tokens
-- Role-based access control (Admin, Safety Officer, Maintenance, Employee)
-- Machine management
-- Issue reporting with photo uploads
-- Issue assignment and resolution workflow
-- File upload and optimization
-- **No bcrypt dependency** - uses built-in Python hashlib
+- **FastAPI** - Modern Python web framework
+- **MongoDB** - NoSQL database with Motor (async driver)
+- **JWT** - JSON Web Token authentication
+- **Uvicorn** - ASGI server
+- **PM2** - Process manager for production
 
-## User Roles & Permissions
+## 📋 Requirements
 
-### Admin
-- Manage all users
-- Manage all machines
-- Assign issues to maintenance personnel
-- Close resolved issues
-- View all data
+- Python 3.8+
+- MongoDB 4.4+
+- Node.js (for PM2)
 
-### Safety Officer
-- Create safety issues
-- Upload photos of issues
-- View all machines and issues
+## 🚀 Quick Deploy on Ubuntu Server
 
-### Maintenance Personnel
-- View assigned issues
-- Update issue status (in progress, resolved)
-- Upload resolution photos
-- Add resolution notes
-
-### Employee
-- View machines
-- View own reported issues
-
-## Workflow
-
-1. **Safety Officer** inspects machines and finds issues
-2. **Safety Officer** creates issue with photos and details
-3. **Admin** validates and assigns issue to **Maintenance** person
-4. **Maintenance** person checks, solves issue, takes photos, and marks as resolved
-5. **Admin** closes the issue
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.8 or higher
-- MongoDB (local or cloud)
-
-### 1. Setup Environment
-
+### 1. Clone Repository
 ```bash
-# Navigate to project directory
-cd D:\PROJECTS\automobile_safety_backend
-
-# Run the setup script (recommended)
-python setup_no_bcrypt.py
+git clone <your-repo-url>
+cd testapp
 ```
 
-### 2. Manual Installation (if setup script fails)
-
+### 2. Run Deployment Script
 ```bash
-# Clean up any existing bcrypt installations
-pip uninstall bcrypt passlib -y
+chmod +x deploy.sh
+./deploy.sh
+```
 
-# Install requirements
+### 3. Start with PM2
+```bash
+pm2 start ecosystem.config.js
+pm2 list
+pm2 logs automobile-safety-api
+```
+
+### 4. Setup Auto-Start
+```bash
+pm2 save
+pm2 startup
+```
+
+### 5. Verify Deployment
+```bash
+curl http://localhost:8000/api/health
+```
+
+## 🔧 Manual Setup
+
+### 1. Virtual Environment
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 2. Install Dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure Database
-
-Edit the `.env` file:
-```bash
-# Database Configuration
-MONGO_URL=mongodb://localhost:27017
-DATABASE_NAME=automobile_safety_db
-
-# Security
-SECRET_KEY=your-super-secret-key-change-this-in-production
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+### 3. Environment Variables
+Update `.env` file with your MongoDB credentials:
+```env
+MONGO_URL=your_mongodb_connection_string
+DATABASE_NAME=autosafety
+SECRET_KEY=your-super-secret-key
 ```
 
-### 4. Start MongoDB
-
-```bash
-# If using local MongoDB
-mongod
-
-# Or start MongoDB service
-# Windows: net start MongoDB
-# Linux: sudo systemctl start mongod
-# macOS: brew services start mongodb-community
-```
-
-### 5. Run the Application
-
+### 4. Run Development Server
 ```bash
 python main.py
 ```
 
-The API will be available at: http://localhost:8000
+### 5. Production with PM2
+```bash
+npm install -g pm2
+pm2 start ecosystem.config.js
+```
 
-## 📚 API Documentation
+## 📱 API Endpoints
 
-Once the server is running, visit:
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **Health Check**: http://localhost:8000/api/health
+- **GET /** - Root endpoint
+- **GET /api/health** - Health check
+- **POST /api/auth/login** - User login
+- **GET /api/users/** - User management
+- **GET /api/machines/** - Machine management  
+- **GET /api/issues/** - Issue tracking
 
-## 🔐 Authentication Details
+## 📖 API Documentation
 
-### Password Hashing
-- Uses **PBKDF2-SHA256** with 100,000 iterations
-- Random 16-byte salt for each password
-- Format: `salt:hash_hex`
-- No external dependencies required
+Visit `http://localhost:8000/docs` for interactive API documentation (Swagger UI).
 
-### JWT Tokens
-- Secure token-based authentication
-- Configurable expiration time
-- Role-based access control
+## 🔐 Security
 
-## 📊 Environment Variables
+- JWT token-based authentication
+- Password hashing with bcrypt
+- CORS configuration
+- Environment variable protection
 
-Create a `.env` file with these variables:
+## 📊 Monitoring
 
 ```bash
-# Database
-MONGO_URL=mongodb://localhost:27017
-DATABASE_NAME=automobile_safety_db
-
-# Security
-SECRET_KEY=your-super-secret-key-here
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-
-# File Upload
-UPLOAD_DIR=uploads
-MAX_FILE_SIZE=5242880
+# PM2 Commands
+pm2 list              # List all processes
+pm2 logs <app-name>    # View logs
+pm2 monit             # Real-time monitoring
+pm2 restart <app-name> # Restart application
+pm2 stop <app-name>    # Stop application
 ```
 
-## 🗂️ Directory Structure
+## 🗂️ Project Structure
 
 ```
-├── main.py                 # Application entry point
-├── requirements.txt        # Python dependencies (no bcrypt)
-├── setup_no_bcrypt.py     # Setup script
-├── .env                   # Environment variables
-├── uploads/              # Uploaded files directory
-└── app/
-    ├── config/          # Configuration files
-    │   ├── database.py  # MongoDB connection
-    │   └── settings.py  # App settings
-    ├── models/          # Pydantic models
-    │   └── schemas.py   # Data models
-    ├── routers/         # API routes
-    │   ├── auth.py      # Authentication endpoints
-    │   ├── users.py     # User management
-    │   ├── machines.py  # Machine operations
-    │   └── issues.py    # Issue management
-    └── utils/           # Utility functions
-        ├── auth.py      # Authentication logic (no bcrypt)
-        └── file_handler.py  # File operations
+testapp/
+├── app/
+│   ├── config/
+│   │   ├── database.py
+│   │   └── settings.py
+│   ├── models/
+│   │   └── schemas.py
+│   ├── routers/
+│   │   ├── auth.py
+│   │   ├── users.py
+│   │   ├── machines.py
+│   │   └── issues.py
+│   └── utils/
+│       └── auth.py
+├── uploads/
+├── logs/
+├── main.py
+├── requirements.txt
+├── ecosystem.config.js
+└── .env
 ```
-
-## 🛠️ Development
-
-### Running in Development Mode
-```bash
-# With auto-reload
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-### Testing the API
-```bash
-# Health check
-curl http://localhost:8000/api/health
-
-# Test registration
-curl -X POST "http://localhost:8000/api/auth/register" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "username": "admin",
-       "password": "admin123",
-       "email": "admin@company.com",
-       "full_name": "Administrator",
-       "role": "admin"
-     }'
-```
-
-## 📱 Mobile App Integration
-
-Update the Flutter app's API service with your server URL:
-
-```dart
-// For local development
-static const String baseUrl = 'http://localhost:8000/api';
-
-// For Android emulator
-static const String baseUrl = 'http://10.0.2.2:8000/api';
-
-// For your network IP
-static const String baseUrl = 'http://YOUR_IP:8000/api';
-```
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-1. **MongoDB Connection Failed**
-   ```bash
-   # Check if MongoDB is running
-   # Windows: tasklist /fi "imagename eq mongod.exe"
-   # Linux/Mac: ps aux | grep mongod
-   ```
-
-2. **Import Errors**
-   ```bash
-   # Reinstall requirements
-   pip install -r requirements.txt
-   ```
-
-3. **Port Already in Use**
-   ```bash
-   # Kill process on port 8000
-   # Windows: netstat -ano | findstr :8000
-   # Linux/Mac: lsof -ti:8000 | xargs kill
-   ```
-
-4. **Authentication Issues**
-   - The system now uses PBKDF2-SHA256
-   - No bcrypt compatibility issues
-   - Check JWT secret key configuration
-
-### Reset Database
-```javascript
-// In MongoDB shell
-use automobile_safety_db
-db.dropDatabase()
-```
-
-## 🚀 Deployment
-
-### Production Checklist
-- [ ] Change default SECRET_KEY
-- [ ] Configure production MongoDB
-- [ ] Set up SSL/HTTPS
-- [ ] Configure CORS for your domain
-- [ ] Set up reverse proxy (nginx)
-- [ ] Configure proper logging
-- [ ] Set up monitoring
-
-### Docker Deployment (Optional)
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "main.py"]
-```
-
-## 📈 Performance Notes
-
-- PBKDF2-SHA256 with 100k iterations provides strong security
-- No bcrypt compilation issues across platforms
-- Pure Python implementation - works everywhere
-- JWT tokens reduce database lookups
 
 ## 🤝 Contributing
 
-1. Follow PEP 8 coding standards
-2. Test authentication thoroughly
-3. Update documentation for new features
-4. Ensure cross-platform compatibility
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## 📄 License
 
-This project is proprietary software for automobile industry safety management.
-
----
-
-**Note**: This version eliminates all bcrypt dependencies while maintaining strong security through PBKDF2-SHA256 password hashing.
+This project is licensed under the MIT License.
